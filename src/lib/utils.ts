@@ -5,7 +5,21 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPrice(cents: number): string {
-  return `$${(cents / 100).toLocaleString()}`;
+  const dollars = cents / 100;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(dollars);
+}
+
+// shorter version for cards
+export function formatPriceShort(cents: number): string {
+  const dollars = cents / 100;
+  if (dollars >= 1000) {
+    return `$${(dollars / 1000).toFixed(1)}k`;
+  }
+  return `$${dollars.toLocaleString()}`;
 }
 
 // TODO: maybe move this to a constants file later
