@@ -1,6 +1,21 @@
+"use client";
+
 import Link from "next/link";
+import { useChat } from "ai/react";
+import { ChatInput } from "@/components/search/chat-input";
+import { ChatMessages } from "@/components/search/chat-messages";
+import { SuggestedQueries } from "@/components/search/suggested-queries";
+import { Search } from "lucide-react";
 
 export default function Home() {
+  const { messages, append, isLoading } = useChat({
+    api: "/api/chat",
+  });
+
+  const handleSend = (text: string) => {
+    append({ role: "user", content: text });
+  };
+
   return (
     <main>
       {/* hero */}
@@ -26,12 +41,12 @@ export default function Home() {
               >
                 Browse All Listings
               </Link>
-              <Link
+              <a
                 href="#search"
                 className="rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50"
               >
-                Try AI Search
-              </Link>
+                Try AI Search ↓
+              </a>
             </div>
           </div>
         </div>
@@ -59,8 +74,35 @@ export default function Home() {
         </div>
       </section>
 
+      {/* AI search section */}
+      <section id="search" className="bg-white py-16">
+        <div className="mx-auto max-w-3xl px-4">
+          <div className="mb-6 flex items-center gap-2">
+            <Search className="h-5 w-5 text-blue-600" />
+            <h2 className="text-2xl font-bold text-gray-900">AI Office Search</h2>
+          </div>
+          <p className="mb-4 text-sm text-gray-500">
+            Describe what your team needs and our AI will find matching offices. Try one of these:
+          </p>
+
+          {messages.length === 0 && (
+            <div className="mb-6">
+              <SuggestedQueries onSelect={handleSend} />
+            </div>
+          )}
+
+          {/* chat messages */}
+          <div className="mb-4 max-h-[500px] overflow-y-auto">
+            <ChatMessages messages={messages} isLoading={isLoading} />
+          </div>
+
+          {/* chat input */}
+          <ChatInput onSend={handleSend} isLoading={isLoading} />
+        </div>
+      </section>
+
       {/* how it works */}
-      <section className="bg-white py-20">
+      <section className="bg-gray-50 py-20">
         <div className="mx-auto max-w-6xl px-4">
           <h2 className="text-center text-2xl font-bold text-gray-900 md:text-3xl">
             How it works
