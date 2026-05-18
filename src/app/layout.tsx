@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { TRPCProvider } from "@/trpc/provider";
@@ -29,6 +30,7 @@ export default function RootLayout({
             {children}
           </div>
           <Footer />
+          <Toaster position="bottom-right" />
         </TRPCProvider>
       </body>
     </html>

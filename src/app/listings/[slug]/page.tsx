@@ -1,15 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { trpc } from "@/trpc/provider";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
 import { ArrowLeft, MapPin, Users, Calendar, ParkingCircle, Dog, Sun, Building } from "lucide-react";
+import { TourRequestForm } from "@/components/listings/tour-request-form";
 
 export default function ListingDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
+  const [showTourForm, setShowTourForm] = useState(false);
 
   const { data: listing, isLoading } = trpc.listings.getBySlug.useQuery(slug);
 
@@ -141,12 +144,24 @@ export default function ListingDetailPage() {
               <p className="mt-3 text-xs text-gray-400">Built in {listing.yearBuilt}</p>
             )}
 
-            <button className="mt-6 w-full rounded-lg bg-blue-600 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
+            <button
+              onClick={() => setShowTourForm(true)}
+              className="mt-6 w-full rounded-lg bg-blue-600 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+            >
               Request Tour
             </button>
           </div>
         </div>
       </div>
+
+      {/* tour request modal */}
+      {showTourForm && (
+        <TourRequestForm
+          listingId={listing.id}
+          listingTitle={listing.title}
+          onClose={() => setShowTourForm(false)}
+        />
+      )}
     </main>
   );
 }
