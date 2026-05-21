@@ -12,8 +12,16 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "spacematch",
-  description: "AI-powered office space finder for startups",
+  title: {
+    default: "spacematch — AI-Powered Office Space Finder",
+    template: "%s | spacematch",
+  },
+  description: "Find your startup's next office space with AI-powered search. Browse verified listings in San Francisco, New York, and Boston.",
+  openGraph: {
+    title: "spacematch — AI-Powered Office Space Finder",
+    description: "Find your startup's next office space with AI-powered search.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
