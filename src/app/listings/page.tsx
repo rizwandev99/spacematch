@@ -15,47 +15,80 @@ export default function ListingsPage() {
   });
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Browse Offices</h1>
-        <p className="mt-1 text-gray-500">Find your team&apos;s next workspace</p>
+    <main style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 20px" }}>
+      {/* header */}
+      <div style={{ marginBottom: 32 }}>
+        <h1
+          style={{
+            fontSize: 26,
+            fontWeight: 700,
+            color: "#e8e8ea",
+            letterSpacing: "-0.5px",
+            margin: 0,
+          }}
+        >
+          Browse Offices
+        </h1>
+        <p style={{ marginTop: 4, fontSize: 13, color: "#6b6b7a" }}>
+          Find your team&apos;s next workspace
+        </p>
       </div>
 
       {/* filters */}
-      <div className="mb-6 flex flex-wrap items-center gap-3">
-        <div className="flex gap-2">
-          <button
-            onClick={() => setCityFilter(undefined)}
-            className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-              !cityFilter
-                ? "bg-gray-900 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
-          >
-            All
-          </button>
-          {CITIES.map((c) => (
-            <button
-              key={c.slug}
-              onClick={() => setCityFilter(c.slug)}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                cityFilter === c.slug
-                  ? "bg-gray-900 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {c.name}
-            </button>
-          ))}
+      <div
+        style={{
+          marginBottom: 24,
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          gap: 10,
+        }}
+      >
+        <div style={{ display: "flex", gap: 6 }}>
+          {[{ slug: undefined, name: "All" }, ...CITIES].map((c) => {
+            const active = cityFilter === c.slug;
+            return (
+              <button
+                key={String(c.slug)}
+                onClick={() => setCityFilter(c.slug)}
+                style={{
+                  padding: "5px 14px",
+                  borderRadius: 100,
+                  border: active
+                    ? "1px solid rgba(124,110,245,0.5)"
+                    : "1px solid rgba(255,255,255,0.1)",
+                  background: active ? "rgba(124,110,245,0.15)" : "rgba(255,255,255,0.04)",
+                  color: active ? "#a89cf5" : "#6b6b7a",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                  transition: "all 0.15s",
+                }}
+              >
+                {c.name}
+              </button>
+            );
+          })}
         </div>
 
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="ml-auto rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600"
+          style={{
+            marginLeft: "auto",
+            padding: "5px 10px",
+            borderRadius: 8,
+            border: "1px solid rgba(255,255,255,0.1)",
+            background: "rgba(255,255,255,0.04)",
+            color: "#9191a0",
+            fontSize: 12,
+            fontFamily: "inherit",
+            cursor: "pointer",
+          }}
         >
           {SORT_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
+            <option key={opt.value} value={opt.value} style={{ background: "#1a1a1f" }}>
               {opt.label}
             </option>
           ))}
@@ -64,20 +97,54 @@ export default function ListingsPage() {
 
       {/* grid */}
       {isLoading ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div
+          style={{
+            display: "grid",
+            gap: 16,
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          }}
+        >
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="animate-pulse rounded-xl border border-gray-200">
-              <div className="aspect-[4/3] bg-gray-200" />
-              <div className="p-4 space-y-2">
-                <div className="h-3 w-20 bg-gray-200 rounded" />
-                <div className="h-5 w-40 bg-gray-200 rounded" />
-                <div className="h-4 w-24 bg-gray-200 rounded" />
+            <div
+              key={i}
+              style={{
+                borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.07)",
+                overflow: "hidden",
+                background: "rgba(255,255,255,0.03)",
+                animation: "pulse 1.5s ease-in-out infinite",
+              }}
+            >
+              <div style={{ aspectRatio: "4/3", background: "rgba(255,255,255,0.04)" }} />
+              <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 8 }}>
+                <div
+                  style={{
+                    height: 10,
+                    width: 80,
+                    borderRadius: 6,
+                    background: "rgba(255,255,255,0.06)",
+                  }}
+                />
+                <div
+                  style={{
+                    height: 14,
+                    width: 160,
+                    borderRadius: 6,
+                    background: "rgba(255,255,255,0.06)",
+                  }}
+                />
               </div>
             </div>
           ))}
         </div>
       ) : listings && listings.length > 0 ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div
+          style={{
+            display: "grid",
+            gap: 16,
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          }}
+        >
           {listings.map((listing) => (
             <ListingCard
               key={listing.id}
@@ -96,10 +163,17 @@ export default function ListingsPage() {
           ))}
         </div>
       ) : (
-        <div className="py-20 text-center">
-          <p className="text-gray-500">No listings found</p>
+        <div style={{ padding: "80px 0", textAlign: "center" }}>
+          <p style={{ color: "#6b6b7a", fontSize: 14 }}>No listings found</p>
         </div>
       )}
+
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+      `}</style>
     </main>
   );
 }

@@ -14,30 +14,58 @@ export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
   if (messages.length === 0) return null;
 
   return (
-    <div className="space-y-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {messages.map((message) => {
-        // skip tool messages
         if (message.role !== "user" && message.role !== "assistant") return null;
         if (!message.parts || message.parts.length === 0) return null;
+
+        const isUser = message.role === "user";
 
         return (
           <div
             key={message.id}
-            className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}
+            style={{
+              display: "flex",
+              gap: 10,
+              justifyContent: isUser ? "flex-end" : "flex-start",
+              alignItems: "flex-start",
+            }}
           >
-            {message.role === "assistant" && (
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100">
-                <Bot className="h-4 w-4 text-blue-600" />
+            {!isUser && (
+              <div
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: "50%",
+                  background: "rgba(124,110,245,0.15)",
+                  border: "1px solid rgba(124,110,245,0.25)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <Bot style={{ width: 14, height: 14, color: "#7c6ef5" }} />
               </div>
             )}
+
             <div
-              className={`max-w-[80%] rounded-lg px-4 py-3 text-sm ${
-                message.role === "user"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-800"
-              }`}
+              style={{
+                maxWidth: "80%",
+                padding: "10px 14px",
+                borderRadius: isUser ? "12px 12px 4px 12px" : "12px 12px 12px 4px",
+                background: isUser
+                  ? "rgba(124,110,245,0.2)"
+                  : "rgba(255,255,255,0.05)",
+                border: isUser
+                  ? "1px solid rgba(124,110,245,0.3)"
+                  : "1px solid rgba(255,255,255,0.07)",
+                fontSize: 13,
+                color: "#e8e8ea",
+                lineHeight: 1.6,
+              }}
             >
-              <div className="whitespace-pre-wrap leading-relaxed space-y-4">
+              <div style={{ whiteSpace: "pre-wrap" }}>
                 {message.parts.map((part, index) => {
                   switch (part.type) {
                     case "text":
@@ -45,66 +73,152 @@ export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
                         <ReactMarkdown
                           key={index}
                           components={{
-                            ul: ({ children }) => <ul className="list-disc pl-4 space-y-1">{children}</ul>,
-                            ol: ({ children }) => <ol className="list-decimal pl-4 space-y-1">{children}</ol>,
-                            li: ({ children }) => <li>{children}</li>,
-                            strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                            ul: ({ children }) => (
+                              <ul style={{ paddingLeft: 16, margin: "6px 0" }}>{children}</ul>
+                            ),
+                            ol: ({ children }) => (
+                              <ol style={{ paddingLeft: 16, margin: "6px 0" }}>{children}</ol>
+                            ),
+                            li: ({ children }) => (
+                              <li style={{ marginBottom: 2 }}>{children}</li>
+                            ),
+                            strong: ({ children }) => (
+                              <strong style={{ color: "#c8c8d8", fontWeight: 600 }}>{children}</strong>
+                            ),
                             a: ({ href, children }) => (
-                              <a href={href} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                              <a
+                                href={href}
+                                style={{ color: "#7c6ef5", textDecoration: "underline" }}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
                                 {children}
                               </a>
                             ),
-                            p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                            p: ({ children }) => (
+                              <p style={{ marginBottom: 8 }}>{children}</p>
+                            ),
                           }}
                         >
                           {part.text}
                         </ReactMarkdown>
                       );
                     case "tool-invocation":
-                    case "dynamic-tool":
-                      // Show loading state or completed state for tool calls
-                      const isOutputAvailable = "state" in part && part.state === "output-available";
+                    case "dynamic-tool": {
+                      const isOutputAvailable =
+                        "state" in part && part.state === "output-available";
                       if (!isOutputAvailable) {
                         return (
-                          <div key={index} className="text-gray-500 italic flex items-center gap-2">
-                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
+                          <div
+                            key={index}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
+                              fontSize: 12,
+                              color: "#6b6b7a",
+                            }}
+                          >
+                            <span
+                              style={{
+                                width: 12,
+                                height: 12,
+                                borderRadius: "50%",
+                                border: "1.5px solid rgba(255,255,255,0.15)",
+                                borderTopColor: "#7c6ef5",
+                                display: "inline-block",
+                                animation: "spin 0.8s linear infinite",
+                              }}
+                            />
                             Searching...
                           </div>
                         );
                       }
                       return (
-                        <div key={index} className="text-gray-500 italic flex items-center gap-2">
-                          <span className="text-green-500">✓</span>
+                        <div
+                          key={index}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                            fontSize: 12,
+                            color: "#6b6b7a",
+                          }}
+                        >
+                          <span style={{ color: "#22c55e", fontSize: 11 }}>✓</span>
                           Searched database
                         </div>
                       );
-                    default:
-                      // Catch specific tool UI parts
+                    }
+                    default: {
                       if (part.type.startsWith("tool-")) {
-                         const isOutputAvailableDefault = "state" in part && part.state === "output-available";
-                         if (!isOutputAvailableDefault) {
-                           return (
-                             <div key={index} className="text-gray-500 italic flex items-center gap-2">
-                               <span className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
-                               Searching...
-                             </div>
-                           );
-                         }
-                         return (
-                           <div key={index} className="text-gray-500 italic flex items-center gap-2">
-                             <span className="text-green-500">✓</span>
-                             Searched database
-                           </div>
-                         );
+                        const isOutputAvailableDefault =
+                          "state" in part && part.state === "output-available";
+                        if (!isOutputAvailableDefault) {
+                          return (
+                            <div
+                              key={index}
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 8,
+                                fontSize: 12,
+                                color: "#6b6b7a",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  width: 12,
+                                  height: 12,
+                                  borderRadius: "50%",
+                                  border: "1.5px solid rgba(255,255,255,0.15)",
+                                  borderTopColor: "#7c6ef5",
+                                  display: "inline-block",
+                                  animation: "spin 0.8s linear infinite",
+                                }}
+                              />
+                              Searching...
+                            </div>
+                          );
+                        }
+                        return (
+                          <div
+                            key={index}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 6,
+                              fontSize: 12,
+                              color: "#6b6b7a",
+                            }}
+                          >
+                            <span style={{ color: "#22c55e", fontSize: 11 }}>✓</span>
+                            Searched database
+                          </div>
+                        );
                       }
                       return null;
+                    }
                   }
                 })}
               </div>
             </div>
-            {message.role === "user" && (
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-200">
-                <User className="h-4 w-4 text-gray-600" />
+
+            {isUser && (
+              <div
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: "50%",
+                  background: "rgba(255,255,255,0.07)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <User style={{ width: 14, height: 14, color: "#9191a0" }} />
               </div>
             )}
           </div>
@@ -113,28 +227,36 @@ export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
 
       {(() => {
         const lastMsg = messages[messages.length - 1];
-        const lastMsgHasText = lastMsg?.parts?.some((p) => p.type === "text" && (p as { text?: string }).text);
+        const lastMsgHasText = lastMsg?.parts?.some(
+          (p) => p.type === "text" && (p as { text?: string }).text
+        );
 
-        // Show while SDK is loading (any phase)
-        const loadingPhase = isLoading && (lastMsg?.role === "user" || (lastMsg?.role === "assistant" && !lastMsgHasText));
+        const loadingPhase =
+          isLoading &&
+          (lastMsg?.role === "user" ||
+            (lastMsg?.role === "assistant" && !lastMsgHasText));
 
-        // Bridge the brief gap between request 1 finishing and request 2 starting:
-        // if the last assistant message has completed tool calls but no text yet,
-        // keep the loader visible even if isLoading is momentarily false.
         const betweenRequests =
           !isLoading &&
           lastMsg?.role === "assistant" &&
           !lastMsgHasText &&
           lastMsg.parts?.some(
-            (p) => (p.type === "tool-invocation" || p.type.startsWith("tool-")) &&
-              "state" in p && p.state === "output-available"
+            (p) =>
+              (p.type === "tool-invocation" || p.type.startsWith("tool-")) &&
+              "state" in p &&
+              p.state === "output-available"
           );
 
         return loadingPhase || betweenRequests ? <DynamicLoader /> : null;
       })()}
 
-      {/* scroll anchor — always kept at the bottom */}
       <div data-scroll-anchor />
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }

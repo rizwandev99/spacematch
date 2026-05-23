@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { cities, neighborhoods, listings, amenities, listingAmenities, savedListings, tourRequests } from "./schema";
+import { cities, neighborhoods, listings, amenities, listingAmenities, tourRequests } from "./schema";
 
 export const citiesRelations = relations(cities, ({ many }) => ({
   neighborhoods: many(neighborhoods),
@@ -19,7 +19,7 @@ export const listingsRelations = relations(listings, ({ one, many }) => ({
     references: [neighborhoods.id],
   }),
   amenityLinks: many(listingAmenities),
-  savedBy: many(savedListings),
+
   tourRequests: many(tourRequests),
 }));
 
@@ -38,12 +38,6 @@ export const listingAmenitiesRelations = relations(listingAmenities, ({ one }) =
   }),
 }));
 
-export const savedListingsRelations = relations(savedListings, ({ one }) => ({
-  listing: one(listings, {
-    fields: [savedListings.listingId],
-    references: [listings.id],
-  }),
-}));
 
 export const tourRequestsRelations = relations(tourRequests, ({ one }) => ({
   listing: one(listings, {

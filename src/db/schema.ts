@@ -56,13 +56,6 @@ export const listingAmenities = pgTable("listing_amenities", {
   pk: primaryKey({ columns: [table.listingId, table.amenityId] }),
 }));
 
-// saved listings (anonymous via session id)
-export const savedListings = pgTable("saved_listings", {
-  id: serial("id").primaryKey(),
-  listingId: integer("listing_id").references(() => listings.id).notNull(),
-  sessionId: varchar("session_id", { length: 100 }).notNull(),
-  createdAt: timestamp("created_at").defaultNow(),
-});
 
 // tour requests
 export const tourRequests = pgTable("tour_requests", {

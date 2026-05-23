@@ -14,12 +14,34 @@ interface SuggestedQueriesProps {
 
 export function SuggestedQueries({ onSelect }: SuggestedQueriesProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
       {suggestions.map((s) => (
         <button
           key={s}
           onClick={() => onSelect(s)}
-          className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-600 transition-colors hover:border-blue-300 hover:text-blue-600"
+          style={{
+            padding: "6px 12px",
+            borderRadius: 8,
+            border: "1px solid rgba(255,255,255,0.1)",
+            background: "rgba(255,255,255,0.04)",
+            color: "#9191a0",
+            fontSize: 12,
+            cursor: "pointer",
+            transition: "border-color 0.15s, color 0.15s, background 0.15s",
+            fontFamily: "inherit",
+          }}
+          onMouseEnter={(e) => {
+            const b = e.currentTarget as HTMLButtonElement;
+            b.style.borderColor = "rgba(124,110,245,0.4)";
+            b.style.color = "#a89cf5";
+            b.style.background = "rgba(124,110,245,0.08)";
+          }}
+          onMouseLeave={(e) => {
+            const b = e.currentTarget as HTMLButtonElement;
+            b.style.borderColor = "rgba(255,255,255,0.1)";
+            b.style.color = "#9191a0";
+            b.style.background = "rgba(255,255,255,0.04)";
+          }}
         >
           {s}
         </button>

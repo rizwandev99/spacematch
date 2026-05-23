@@ -1,38 +1,98 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
+
+const navLinks = [
+  { href: "/listings", label: "Browse" },
+];
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          space<span className="text-blue-600">match</span>
+    <header
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+        background: "rgba(13, 13, 15, 0.85)",
+        borderBottom: "1px solid rgba(255,255,255,0.07)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 1100,
+          margin: "0 auto",
+          padding: "0 20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          height: 56,
+        }}
+      >
+        <Link href="/" style={{ textDecoration: "none" }}>
+          <span
+            style={{
+              fontSize: 18,
+              fontWeight: 700,
+              letterSpacing: "-0.5px",
+              color: "#e8e8ea",
+            }}
+          >
+            space
+            <span style={{ color: "#7c6ef5" }}>match</span>
+          </span>
         </Link>
 
         {/* desktop nav */}
-        <nav className="hidden items-center gap-6 md:flex">
-          <Link href="/listings" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-            Browse
-          </Link>
-          <Link href="/saved" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-            Saved
-          </Link>
-          <Link href="/compare" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-            Compare
-          </Link>
+        <nav style={{ display: "flex", alignItems: "center", gap: 4 }} className="hidden md:flex">
+          {navLinks.map(({ href, label }) => {
+            const active = pathname === href;
+            return (
+              <Link
+                key={href}
+                href={href}
+                style={{
+                  fontSize: 13,
+                  padding: "6px 14px",
+                  borderRadius: 8,
+                  color: active ? "#e8e8ea" : "#6b6b7a",
+                  background: active ? "rgba(255,255,255,0.07)" : "transparent",
+                  textDecoration: "none",
+                  transition: "color 0.15s, background 0.15s",
+                }}
+                onMouseEnter={(e) => {
+                  if (!active) (e.currentTarget as HTMLAnchorElement).style.color = "#b0b0c0";
+                }}
+                onMouseLeave={(e) => {
+                  if (!active) (e.currentTarget as HTMLAnchorElement).style.color = "#6b6b7a";
+                }}
+              >
+                {label}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* mobile hamburger */}
         <button
-          className="md:hidden p-2"
+          className="md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            color: "#9191a0",
+            padding: 6,
+          }}
         >
-          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {mobileOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (
@@ -44,17 +104,30 @@ export function Header() {
 
       {/* mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-gray-100 bg-white px-4 py-3 md:hidden">
-          <nav className="flex flex-col gap-3">
-            <Link href="/listings" className="text-sm text-gray-700" onClick={() => setMobileOpen(false)}>
-              Browse
-            </Link>
-            <Link href="/saved" className="text-sm text-gray-700" onClick={() => setMobileOpen(false)}>
-              Saved
-            </Link>
-            <Link href="/compare" className="text-sm text-gray-700" onClick={() => setMobileOpen(false)}>
-              Compare
-            </Link>
+        <div
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.07)",
+            padding: "12px 20px",
+          }}
+          className="md:hidden"
+        >
+          <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            {navLinks.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                style={{
+                  fontSize: 14,
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  color: "#9191a0",
+                  textDecoration: "none",
+                }}
+                onClick={() => setMobileOpen(false)}
+              >
+                {label}
+              </Link>
+            ))}
           </nav>
         </div>
       )}
