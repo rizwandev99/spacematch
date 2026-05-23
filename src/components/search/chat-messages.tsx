@@ -50,10 +50,10 @@ const ListingCard = ({ listing }: { listing: any }) => {
         <div style={{ fontWeight: 600, fontSize: 13, color: "#e8e8ea", marginBottom: 4 }}>
           {listing.title}
         </div>
-        <div style={{ fontSize: 12, color: "#9191a0", marginBottom: 6 }}>
+        <div style={{ fontSize: 12, color: "#a1a1aa", marginBottom: 6 }}>
           {listing.neighborhood}{listing.city ? `, ${listing.city}` : ""}
           {" · "}{listing.sqft?.toLocaleString()} sqft
-          {" · "}<span style={{ color: "#c8c8d8" }}>{price}</span>
+          {" · "}<span style={{ color: "#d4d4d8" }}>{price}</span>
         </div>
         {listing.petFriendly && (
           <span style={{
@@ -155,7 +155,7 @@ export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
                             a: ({ href, children }) => (
                               <a
                                 href={href}
-                                style={{ color: "#7c6ef5", textDecoration: "underline" }}
+                                style={{ color: "#a5b4fc", textDecoration: "underline" }}
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
