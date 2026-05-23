@@ -56,7 +56,7 @@ export function DynamicLoader() {
             alignItems: "center",
             gap: 8,
             fontSize: 12,
-            color: "#6b6b7a",
+            color: "#ffffff",
           }}
         >
           {/* three dot loader */}

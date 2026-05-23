@@ -39,16 +39,16 @@ export function ChatInput({ onSend, isLoading }: ChatInputProps) {
           flex: 1,
           padding: "10px 14px",
           borderRadius: 10,
-          border: "1px solid rgba(255,255,255,0.1)",
-          background: "rgba(255,255,255,0.05)",
-          color: "#e8e8ea",
+          border: "1px solid rgba(255,255,255,0.2)",
+          background: "rgba(255,255,255,0.08)",
+          color: "#ffffff",
           fontSize: 13,
           fontFamily: "inherit",
           outline: "none",
           transition: "border-color 0.15s",
         }}
-        onFocus={(e) => ((e.currentTarget as HTMLInputElement).style.borderColor = "rgba(124,110,245,0.5)")}
-        onBlur={(e) => ((e.currentTarget as HTMLInputElement).style.borderColor = "rgba(255,255,255,0.1)")}
+        onFocus={(e) => ((e.currentTarget as HTMLInputElement).style.borderColor = "rgba(124,110,245,0.6)")}
+        onBlur={(e) => ((e.currentTarget as HTMLInputElement).style.borderColor = "rgba(255,255,255,0.2)")}
       />
       <button
         type="submit"

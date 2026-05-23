@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { TRPCProvider } from "@/trpc/provider";
 
 const inter = Inter({
@@ -31,13 +30,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}>
         <TRPCProvider>
           <Header />
-          <div className="min-h-screen">
+          <div className="flex-1 flex flex-col">
             {children}
           </div>
-          <Footer />
           <Toaster position="bottom-right" />
         </TRPCProvider>
       </body>

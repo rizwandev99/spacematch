@@ -28,7 +28,7 @@ export function SearchResults({ results }: SearchResultsProps) {
 
   return (
     <div className="mt-4">
-      <h3 className="mb-3 text-sm font-medium text-gray-500">
+      <h3 className="mb-3 text-sm font-medium text-slate-400">
         Found {results.length} matching offices
       </h3>
       <div className="grid gap-3 sm:grid-cols-2">
@@ -36,18 +36,18 @@ export function SearchResults({ results }: SearchResultsProps) {
           <Link
             key={listing.id}
             href={`/listings/${listing.slug}`}
-            className="group flex gap-3 rounded-lg border border-gray-200 p-3 transition-shadow hover:shadow-md"
+            className="group flex gap-3 rounded-lg border border-slate-800/60 p-3 transition-shadow hover:shadow-md"
           >
             <div className="flex-1">
-              <div className="flex items-center gap-1 text-xs text-gray-500">
+              <div className="flex items-center gap-1 text-xs text-slate-400">
                 <MapPin className="h-3 w-3" />
                 {listing.neighborhood}, {listing.city}
               </div>
-              <h4 className="mt-1 text-sm font-semibold text-gray-900 group-hover:text-blue-600">
+              <h4 className="mt-1 text-sm font-semibold text-slate-200 group-hover:text-[#7c6ef5]">
                 {listing.title}
               </h4>
-              <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
-                <span className="font-medium text-gray-900">
+              <div className="mt-2 flex items-center gap-3 text-xs text-slate-400">
+                <span className="font-medium text-slate-200">
                   ${listing.pricePerMonth.toLocaleString()}/mo
                 </span>
                 <span>{listing.sqft.toLocaleString()} sqft</span>
@@ -55,7 +55,7 @@ export function SearchResults({ results }: SearchResultsProps) {
               </div>
             </div>
             <div className="flex items-center">
-              <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600" />
+              <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-[#7c6ef5]" />
             </div>
           </Link>
         ))}

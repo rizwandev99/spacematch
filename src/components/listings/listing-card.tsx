@@ -130,7 +130,7 @@ export function ListingCard({
               alignItems: "center",
               gap: 4,
               fontSize: 11,
-              color: "#6b6b7a",
+              color: "#ffffff",
               marginBottom: 4,
             }}
           >
@@ -163,9 +163,9 @@ export function ListingCard({
               <span style={{ fontSize: 16, fontWeight: 700, color: "#e8e8ea" }}>
                 {formatPrice(pricePerMonth)}
               </span>
-              <span style={{ fontSize: 11, color: "#6b6b7a" }}>/mo</span>
+              <span style={{ fontSize: 11, color: "#ffffff" }}>/mo</span>
             </div>
-            <div style={{ textAlign: "right", fontSize: 11, color: "#6b6b7a" }}>
+            <div style={{ textAlign: "right", fontSize: 11, color: "#ffffff" }}>
               <div>{sqft.toLocaleString()} sqft</div>
               <div>
                 {minDesks}–{maxDesks} desks

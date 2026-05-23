@@ -7,7 +7,7 @@ import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } fro
 import { ChatInput } from "@/components/search/chat-input";
 import { ChatMessages } from "@/components/search/chat-messages";
 import { SuggestedQueries } from "@/components/search/suggested-queries";
-import { Search } from "lucide-react";
+import { Search, RotateCcw } from "lucide-react";
 
 export default function Home() {
   const chatObj = useChat({
@@ -16,7 +16,8 @@ export default function Home() {
     }),
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
   });
-  const { messages, sendMessage, isLoading } = chatObj;
+  const { messages, sendMessage, status, setMessages } = chatObj;
+  const isLoading = status === 'submitted' || status === 'streaming';
 
   const [isPending, setIsPending] = useState(false);
   const effectiveLoading = isPending || isLoading;
@@ -40,102 +41,56 @@ export default function Home() {
 
   return (
     <main
-      style={{
-        minHeight: "calc(100vh - 180px)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "40px 20px",
-        position: "relative",
-      }}
+      className="relative flex flex-1 w-full flex-col items-center justify-center p-4 md:p-8"
     >
-      {/* subtle background glow */}
-      <div
+      {/* Background Image with Overlay */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{
-          position: "absolute",
-          top: "10%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: 800,
-          height: 600,
-          background: "radial-gradient(ellipse at center, rgba(124,110,245,0.08) 0%, transparent 60%)",
-          pointerEvents: "none",
-          zIndex: -1,
+          backgroundImage: "url('/images/unsplash/hero-bg.jpg')",
         }}
-      />
+      >
+        <div className="absolute inset-0 bg-black/50"></div>
+      </div>
 
-      <div style={{ maxWidth: 700, width: "100%", margin: "0 auto" }}>
+      <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center">
         {/* title */}
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "5px 14px",
-              borderRadius: 100,
-              background: "rgba(124,110,245,0.1)",
-              border: "1px solid rgba(124,110,245,0.25)",
-              fontSize: 11,
-              fontWeight: 500,
-              color: "#a89cf5",
-              letterSpacing: "0.04em",
-              textTransform: "uppercase",
-              marginBottom: 16,
-            }}
-          >
-            <span
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: "#7c6ef5",
-                display: "inline-block",
-              }}
-            />
-            AI-Powered Search
+        {messages.length === 0 && (
+          <div className="text-center mb-10 w-full">
+            <h1 className="text-5xl md:text-7xl font-semibold text-white tracking-tight mb-4 drop-shadow-md">
+              How top startups<br />find <span className="italic font-light">office space</span>
+            </h1>
+
+            <p className="text-lg md:text-xl text-slate-200 font-medium drop-shadow">
+              Access the whole market with expert support
+            </p>
           </div>
-
-          <h1
-            style={{
-              fontSize: "clamp(32px, 5vw, 48px)",
-              fontWeight: 800,
-              lineHeight: 1.1,
-              letterSpacing: "-1px",
-              color: "#e8e8ea",
-              marginBottom: 16,
-            }}
-          >
-            Find your team&apos;s next{" "}
-            <span style={{ color: "#7c6ef5" }}>office space</span>
-          </h1>
-
-          <p
-            style={{
-              fontSize: 16,
-              color: "#6b6b7a",
-              lineHeight: 1.6,
-              maxWidth: 480,
-              margin: "0 auto",
-            }}
-          >
-            Describe what your team needs and our AI will search the full market to find matching offices.
-          </p>
-        </div>
+        )}
 
         {/* glass card chat */}
         <div
-          className="glass"
+          className="w-full max-w-2xl glass backdrop-blur-xl bg-black/70 border border-white/10"
           style={{
             borderRadius: 16,
             padding: "24px",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
+            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
           }}
         >
           {messages.length === 0 && (
             <div style={{ marginBottom: 24 }}>
               <SuggestedQueries onSelect={handleSend} />
+            </div>
+          )}
+
+          {messages.length > 0 && (
+            <div className="flex justify-end mb-4 border-b border-white/10 pb-4">
+              <button
+                onClick={() => setMessages([])}
+                className="text-xs font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1.5"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                Start New Search
+              </button>
             </div>
           )}
 

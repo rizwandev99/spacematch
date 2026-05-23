@@ -40,7 +40,7 @@ export function Footer() {
                 space<span style={{ color: "#7c6ef5" }}>match</span>
               </span>
             </Link>
-            <p style={{ marginTop: 4, fontSize: 12, color: "#6b6b7a" }}>
+            <p style={{ marginTop: 4, fontSize: 12, color: "#ffffff" }}>
               AI-powered office search for startups
             </p>
           </div>
@@ -52,7 +52,7 @@ export function Footer() {
               <Link
                 key={href}
                 href={href}
-                style={{ fontSize: 13, color: "#6b6b7a", textDecoration: "none" }}
+                style={{ fontSize: 13, color: "#ffffff", textDecoration: "none" }}
               >
                 {label}
               </Link>

@@ -29,7 +29,7 @@ export default function ListingsPage() {
         >
           Browse Offices
         </h1>
-        <p style={{ marginTop: 4, fontSize: 13, color: "#6b6b7a" }}>
+        <p style={{ marginTop: 4, fontSize: 13, color: "#ffffff" }}>
           Find your team&apos;s next workspace
         </p>
       </div>
@@ -58,7 +58,7 @@ export default function ListingsPage() {
                     ? "1px solid rgba(124,110,245,0.5)"
                     : "1px solid rgba(255,255,255,0.1)",
                   background: active ? "rgba(124,110,245,0.15)" : "rgba(255,255,255,0.04)",
-                  color: active ? "#a89cf5" : "#6b6b7a",
+                  color: active ? "#a89cf5" : "#ffffff",
                   fontSize: 12,
                   fontWeight: 500,
                   cursor: "pointer",
@@ -97,13 +97,7 @@ export default function ListingsPage() {
 
       {/* grid */}
       {isLoading ? (
-        <div
-          style={{
-            display: "grid",
-            gap: 16,
-            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
@@ -138,13 +132,7 @@ export default function ListingsPage() {
           ))}
         </div>
       ) : listings && listings.length > 0 ? (
-        <div
-          style={{
-            display: "grid",
-            gap: 16,
-            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
           {listings.map((listing) => (
             <ListingCard
               key={listing.id}
@@ -164,7 +152,7 @@ export default function ListingsPage() {
         </div>
       ) : (
         <div style={{ padding: "80px 0", textAlign: "center" }}>
-          <p style={{ color: "#6b6b7a", fontSize: 14 }}>No listings found</p>
+          <p style={{ color: "#ffffff", fontSize: 14 }}>No listings found</p>
         </div>
       )}
 

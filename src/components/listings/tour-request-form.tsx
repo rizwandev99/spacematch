@@ -61,16 +61,16 @@ export function TourRequestForm({ listingId, listingTitle, onClose }: TourReques
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
       <div
-        className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-xl bg-[#0f1115] p-6 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Request Tour</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <h2 className="text-lg font-semibold text-slate-200">Request Tour</h2>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-400">
             <X className="h-5 w-5" />
           </button>
         </div>
-        <p className="mb-4 text-sm text-gray-500">
+        <p className="mb-4 text-sm text-slate-400">
           Schedule a tour of <span className="font-medium">{listingTitle}</span>
         </p>
 
@@ -80,7 +80,7 @@ export function TourRequestForm({ listingId, listingTitle, onClose }: TourReques
             placeholder="Your name *"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-slate-700 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
             required
           />
           <input
@@ -88,7 +88,7 @@ export function TourRequestForm({ listingId, listingTitle, onClose }: TourReques
             placeholder="Email *"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-slate-700 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
             required
           />
           <input
@@ -96,7 +96,7 @@ export function TourRequestForm({ listingId, listingTitle, onClose }: TourReques
             placeholder="Company name"
             value={formData.company}
             onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-slate-700 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
           />
           <div className="grid grid-cols-2 gap-3">
             <input
@@ -104,13 +104,13 @@ export function TourRequestForm({ listingId, listingTitle, onClose }: TourReques
               placeholder="Team size"
               value={formData.teamSize}
               onChange={(e) => setFormData({ ...formData, teamSize: e.target.value })}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              className="rounded-lg border border-slate-700 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
             />
             <input
               type="date"
               value={formData.preferredDate}
               onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              className="rounded-lg border border-slate-700 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
           <textarea
@@ -118,13 +118,13 @@ export function TourRequestForm({ listingId, listingTitle, onClose }: TourReques
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             rows={3}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none resize-none"
+            className="w-full rounded-lg border border-slate-700 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none resize-none"
           />
 
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="w-full rounded-lg bg-blue-600 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            className="w-full rounded-lg bg-[#7c6ef5] py-2.5 text-sm font-medium text-white hover:bg-[#6b5ee0] disabled:opacity-50 transition-colors"
           >
             {mutation.isPending ? "Submitting..." : "Submit Request"}
           </button>

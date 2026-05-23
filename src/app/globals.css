@@ -7,7 +7,7 @@
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.14);
   --text: #e8e8ea;
-  --text-muted: #6b6b7a;
+  --text-muted: #ffffff;
   --text-dim: #9191a0;
   --accent: #7c6ef5;
   --accent-hover: #6a5ce0;
@@ -24,7 +24,11 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(circle at 15% 0%, rgba(124, 110, 245, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 85% 0%, rgba(45, 212, 191, 0.08) 0%, transparent 50%);
+  background-attachment: fixed;
   color: var(--text);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;

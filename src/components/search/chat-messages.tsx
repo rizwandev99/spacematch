@@ -4,6 +4,73 @@ import type { UIMessage } from "ai";
 import { Bot, User } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { DynamicLoader } from "./dynamic-loader";
+import { useState, useEffect } from "react";
+
+const FALLBACK_IMG = "/images/unsplash/office-1.jpg";
+
+const ListingCard = ({ listing }: { listing: any }) => {
+  const [imgSrc, setImgSrc] = useState(listing.imageUrl || FALLBACK_IMG);
+
+  useEffect(() => {
+    setImgSrc(listing.imageUrl || FALLBACK_IMG);
+  }, [listing.imageUrl]);
+
+  const price = listing.pricePerMonth
+    ? `$${listing.pricePerMonth.toLocaleString()}/mo`
+    : "Price on request";
+
+  return (
+    <a
+      href={`/listings/${listing.slug}`}
+      style={{
+        display: "block",
+        background: "rgba(255,255,255,0.04)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        borderRadius: 10,
+        overflow: "hidden",
+        marginBottom: 10,
+        textDecoration: "none",
+        transition: "border-color 0.15s",
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.borderColor = "rgba(124,110,245,0.4)")}
+      onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
+    >
+      <img
+        src={imgSrc}
+        alt={listing.title}
+        onError={() => setImgSrc(FALLBACK_IMG)}
+        style={{
+          width: "100%",
+          height: 160,
+          objectFit: "cover",
+          display: "block",
+        }}
+      />
+      <div style={{ padding: "10px 12px" }}>
+        <div style={{ fontWeight: 600, fontSize: 13, color: "#e8e8ea", marginBottom: 4 }}>
+          {listing.title}
+        </div>
+        <div style={{ fontSize: 12, color: "#9191a0", marginBottom: 6 }}>
+          {listing.neighborhood}{listing.city ? `, ${listing.city}` : ""}
+          {" · "}{listing.sqft?.toLocaleString()} sqft
+          {" · "}<span style={{ color: "#c8c8d8" }}>{price}</span>
+        </div>
+        {listing.petFriendly && (
+          <span style={{
+            fontSize: 10,
+            background: "rgba(34,197,94,0.12)",
+            color: "#22c55e",
+            border: "1px solid rgba(34,197,94,0.2)",
+            borderRadius: 4,
+            padding: "2px 6px",
+          }}>
+            🐾 Pet-friendly
+          </span>
+        )}
+      </div>
+    </a>
+  );
+};
 
 interface ChatMessagesProps {
   messages: UIMessage[];
@@ -95,6 +162,7 @@ export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
                                 {children}
                               </a>
                             ),
+                            img: () => null,
                             p: ({ children }) => (
                               <p style={{ marginBottom: 8 }}>{children}</p>
                             ),
@@ -116,7 +184,7 @@ export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
                               alignItems: "center",
                               gap: 8,
                               fontSize: 12,
-                              color: "#6b6b7a",
+                              color: "#ffffff",
                             }}
                           >
                             <span
@@ -134,19 +202,27 @@ export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
                           </div>
                         );
                       }
+                      // Render listing cards from the actual tool output
+                      const toolOutput = (part as any).output;
+                      const listings: any[] = Array.isArray(toolOutput) ? toolOutput : [];
                       return (
-                        <div
-                          key={index}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6,
-                            fontSize: 12,
-                            color: "#6b6b7a",
-                          }}
-                        >
-                          <span style={{ color: "#22c55e", fontSize: 11 }}>✓</span>
-                          Searched database
+                        <div key={index}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 6,
+                              fontSize: 12,
+                              color: "#ffffff",
+                              marginBottom: listings.length > 0 ? 12 : 0,
+                            }}
+                          >
+                            <span style={{ color: "#22c55e", fontSize: 11 }}>✓</span>
+                            Searched database — {listings.length} result{listings.length !== 1 ? "s" : ""}
+                          </div>
+                          {listings.map((listing) => (
+                            <ListingCard key={listing.id} listing={listing} />
+                          ))}
                         </div>
                       );
                     }
@@ -163,7 +239,7 @@ export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
                                 alignItems: "center",
                                 gap: 8,
                                 fontSize: 12,
-                                color: "#6b6b7a",
+                                color: "#ffffff",
                               }}
                             >
                               <span
@@ -181,19 +257,26 @@ export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
                             </div>
                           );
                         }
+                        const toolOutputDefault = (part as any).output;
+                        const listingsDefault: any[] = Array.isArray(toolOutputDefault) ? toolOutputDefault : [];
                         return (
-                          <div
-                            key={index}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 6,
-                              fontSize: 12,
-                              color: "#6b6b7a",
-                            }}
-                          >
-                            <span style={{ color: "#22c55e", fontSize: 11 }}>✓</span>
-                            Searched database
+                          <div key={index}>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 6,
+                                fontSize: 12,
+                                color: "#ffffff",
+                                marginBottom: listingsDefault.length > 0 ? 12 : 0,
+                              }}
+                            >
+                              <span style={{ color: "#22c55e", fontSize: 11 }}>✓</span>
+                              Searched database — {listingsDefault.length} result{listingsDefault.length !== 1 ? "s" : ""}
+                            </div>
+                            {listingsDefault.map((listing) => (
+                              <ListingCard key={listing.id} listing={listing} />
+                            ))}
                           </div>
                         );
                       }

@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { config } from "dotenv";
-import { cities, neighborhoods, amenities, listings, listingAmenities } from "../src/db/schema";
+import { cities, neighborhoods, amenities, listings, listingAmenities, tourRequests } from "../src/db/schema";
 
 config({ path: ".env.local" });
 
@@ -13,6 +13,7 @@ async function seed() {
 
   // clear existing data
   await db.delete(listingAmenities);
+  await db.delete(tourRequests);
   await db.delete(listings);
   await db.delete(amenities);
   await db.delete(neighborhoods);
@@ -72,23 +73,23 @@ async function seed() {
     return shuffled.slice(0, count).map(a => a.id);
   };
 
-  // images from unsplash
+  // local images
   const images = [
-    "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
-    "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=800&q=80",
-    "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80",
-    "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&q=80",
-    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80",
-    "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&q=80",
-    "https://images.unsplash.com/photo-1497215842964-222b430dc094?w=800&q=80",
-    "https://images.unsplash.com/photo-1564069114553-7215e1ff1890?w=800&q=80",
-    "https://images.unsplash.com/photo-1604328698692-f76ea9498e76?w=800&q=80",
-    "https://images.unsplash.com/photo-1568992688065-536aad8a12f6?w=800&q=80",
-    "https://images.unsplash.com/photo-1600508774634-4e11d34730e2?w=800&q=80",
-    "https://images.unsplash.com/photo-1606836591695-4d58a73eba1e?w=800&q=80",
-    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80",
-    "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800&q=80",
-    "https://images.unsplash.com/photo-1577412647305-991150c7d163?w=800&q=80",
+    "/images/unsplash/office-1.jpg",
+    "/images/unsplash/office-2.jpg",
+    "/images/unsplash/office-3.jpg",
+    "/images/unsplash/office-4.jpg",
+    "/images/unsplash/office-5.jpg",
+    "/images/unsplash/office-6.jpg",
+    "/images/unsplash/office-7.jpg",
+    "/images/unsplash/office-8.jpg",
+    "/images/unsplash/office-9.jpg",
+    "/images/unsplash/office-10.jpg",
+    "/images/unsplash/office-11.jpg",
+    "/images/unsplash/office-12.jpg",
+    "/images/unsplash/office-13.jpg",
+    "/images/unsplash/office-14.jpg",
+    "/images/unsplash/office-15.jpg",
   ];
 
   const img = (i: number) => images[i % images.length];

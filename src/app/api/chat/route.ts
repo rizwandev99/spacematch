@@ -8,6 +8,16 @@ import { eq, and, gte, lte, desc } from "drizzle-orm";
 
 const MAX_RESULTS = 10;
 
+const SYSTEM_PROMPT = [
+  "You are a helpful office space search assistant. You help startup teams find office space in San Francisco, New York, and Boston.",
+  "",
+  "When a user describes what they need, call the searchListings tool EXACTLY ONCE to find matching offices. After you receive the tool results, immediately write your final response — do NOT call any tool again.",
+  "",
+  "Be concise and friendly. If you're not sure about something, ask. Don't make up information about listings that weren't returned by the tool.",
+  "",
+  "When presenting results or answering follow-up questions about listings, you MUST format each listing's name as a clickable Markdown link: [Title](/listings/slug). Do NOT include any image markdown or image URLs in your response.",
+].join("\n");
+
 const groq = createOpenAI({
   baseURL: "https://api.groq.com/openai/v1",
   apiKey: process.env.GROQ_API_KEY,
@@ -32,16 +42,10 @@ export async function POST(req: Request) {
 
   try {
     const result = streamText({
-      model: groq("llama-3.3-70b-versatile"),
+      model: groq("llama-3.1-8b-instant"),
       toolChoice: hasToolResults ? "none" : "auto",
 
-      system: `You are a helpful office space search assistant. You help startup teams find office space in San Francisco, New York, and Boston.
-
-When a user describes what they need, call the searchListings tool EXACTLY ONCE to find matching offices. After you receive the tool results, immediately write your final response — do NOT call any tool again.
-
-Be concise and friendly. If you're not sure about something, ask. Don't make up information about listings that weren't returned by the tool.
-
-When presenting results, mention the listing name, neighborhood, price, size, and why it matches. Use bullet points for clarity.`,
+      system: SYSTEM_PROMPT,
       messages: await convertToModelMessages(messages),
       tools: {
         searchListings: tool({
@@ -85,6 +89,7 @@ When presenting results, mention the listing name, neighborhood, price, size, an
                 hasNaturalLight: listings.hasNaturalLight,
                 neighborhood: neighborhoods.name,
                 city: cities.name,
+                imageUrl: listings.imageUrl,
               })
               .from(listings)
               .innerJoin(neighborhoods, eq(listings.neighborhoodId, neighborhoods.id))
@@ -111,6 +116,7 @@ When presenting results, mention the listing name, neighborhood, price, size, an
                   hasNaturalLight: listings.hasNaturalLight,
                   neighborhood: neighborhoods.name,
                   city: cities.name,
+                  imageUrl: listings.imageUrl,
                 })
                 .from(listings)
                 .innerJoin(neighborhoods, eq(listings.neighborhoodId, neighborhoods.id))
@@ -135,7 +141,6 @@ When presenting results, mention the listing name, neighborhood, price, size, an
           },
         }),
       },
-      maxSteps: 3,
     });
 
     return result.toUIMessageStreamResponse();

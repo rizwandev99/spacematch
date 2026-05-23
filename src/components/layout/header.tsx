@@ -12,16 +12,19 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
+  const isHome = pathname === "/";
+
   return (
     <header
       style={{
-        position: "sticky",
+        position: isHome ? "absolute" : "sticky",
+        width: "100%",
         top: 0,
         zIndex: 50,
-        background: "rgba(13, 13, 15, 0.85)",
-        borderBottom: "1px solid rgba(255,255,255,0.07)",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
+        background: isHome ? "transparent" : "rgba(13, 13, 15, 0.85)",
+        borderBottom: isHome ? "none" : "1px solid rgba(255,255,255,0.07)",
+        backdropFilter: isHome ? "none" : "blur(16px)",
+        WebkitBackdropFilter: isHome ? "none" : "blur(16px)",
       }}
     >
       <div
@@ -61,7 +64,7 @@ export function Header() {
                   fontSize: 13,
                   padding: "6px 14px",
                   borderRadius: 8,
-                  color: active ? "#e8e8ea" : "#6b6b7a",
+                  color: active ? "#e8e8ea" : "#ffffff",
                   background: active ? "rgba(255,255,255,0.07)" : "transparent",
                   textDecoration: "none",
                   transition: "color 0.15s, background 0.15s",
@@ -70,7 +73,7 @@ export function Header() {
                   if (!active) (e.currentTarget as HTMLAnchorElement).style.color = "#b0b0c0";
                 }}
                 onMouseLeave={(e) => {
-                  if (!active) (e.currentTarget as HTMLAnchorElement).style.color = "#6b6b7a";
+                  if (!active) (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
                 }}
               >
                 {label}
