@@ -27,7 +27,16 @@ export function TourRequestForm({ listingId, listingTitle, onClose }: TourReques
       onClose();
     },
     onError: (err) => {
-      toast.error("Something went wrong. Please try again.");
+      try {
+        const parsedError = JSON.parse(err.message);
+        if (Array.isArray(parsedError) && parsedError.length > 0 && parsedError[0].message) {
+          toast.error(parsedError[0].message);
+          return;
+        }
+      } catch (e) {
+        // ignore parse error
+      }
+      toast.error(err.message || "Something went wrong. Please try again.");
       console.error("tour request failed:", err);
     },
   });

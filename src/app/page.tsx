@@ -1,19 +1,45 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useChat } from "ai/react";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 import { ChatInput } from "@/components/search/chat-input";
 import { ChatMessages } from "@/components/search/chat-messages";
 import { SuggestedQueries } from "@/components/search/suggested-queries";
 import { Search } from "lucide-react";
 
 export default function Home() {
-  const { messages, append, isLoading } = useChat({
-    api: "/api/chat",
+  const chatObj = useChat({
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+    }),
+    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
   });
+  const { messages, sendMessage, isLoading } = chatObj;
+
+  // isPending fires synchronously the moment the user presses Enter,
+  // before the SDK has had a chance to update isLoading — eliminating
+  // the blank frame between submit and the loader appearing.
+  const [isPending, setIsPending] = useState(false);
+  const effectiveLoading = isPending || isLoading;
+
+  useEffect(() => {
+    if (!isLoading) setIsPending(false);
+  }, [isLoading]);
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom as new content streams in (scroll the box only, not the page)
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+  }, [messages, effectiveLoading]);
 
   const handleSend = (text: string) => {
-    append({ role: "user", content: text });
+    setIsPending(true);
+    sendMessage({ text });
   };
 
   return (
@@ -92,12 +118,12 @@ export default function Home() {
           )}
 
           {/* chat messages */}
-          <div className="mb-4 max-h-[500px] overflow-y-auto">
-            <ChatMessages messages={messages} isLoading={isLoading} />
+          <div ref={scrollContainerRef} className="mb-4 max-h-[500px] overflow-y-auto">
+            <ChatMessages messages={messages} isLoading={effectiveLoading} />
           </div>
 
           {/* chat input */}
-          <ChatInput onSend={handleSend} isLoading={isLoading} />
+          <ChatInput onSend={handleSend} isLoading={effectiveLoading} />
         </div>
       </section>
 
