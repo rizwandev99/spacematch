@@ -76,12 +76,6 @@ export default function Home() {
             boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
           }}
         >
-          {messages.length === 0 && (
-            <div style={{ marginBottom: 24 }}>
-              <SuggestedQueries onSelect={handleSend} />
-            </div>
-          )}
-
           {messages.length > 0 && (
             <div className="flex justify-end mb-4 border-b border-white/10 pb-4">
               <button
@@ -95,15 +89,23 @@ export default function Home() {
           )}
 
           {/* chat messages */}
-          <div
-            ref={scrollContainerRef}
-            style={{ maxHeight: 500, overflowY: "auto", marginBottom: 16 }}
-          >
-            <ChatMessages messages={messages} isLoading={effectiveLoading} />
-          </div>
+          {messages.length > 0 && (
+            <div
+              ref={scrollContainerRef}
+              style={{ maxHeight: 500, overflowY: "auto", marginBottom: 16 }}
+            >
+              <ChatMessages messages={messages} isLoading={effectiveLoading} />
+            </div>
+          )}
 
           {/* chat input */}
           <ChatInput onSend={handleSend} isLoading={effectiveLoading} />
+
+          {messages.length === 0 && (
+            <div style={{ marginTop: 24 }}>
+              <SuggestedQueries onSelect={handleSend} />
+            </div>
+          )}
         </div>
       </div>
     </main>

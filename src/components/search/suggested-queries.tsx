@@ -3,8 +3,6 @@
 const suggestions = [
   "10 person team in SF, dog friendly, under $8k/mo",
   "20-30 desks in NYC Soho or Tribeca with natural light",
-  "Small 5 person office in Boston near transit",
-  "Startup office in San Francisco with parking and rooftop",
 ];
 
 interface SuggestedQueriesProps {
@@ -13,7 +11,7 @@ interface SuggestedQueriesProps {
 
 export function SuggestedQueries({ onSelect }: SuggestedQueriesProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-xl mx-auto">
       {suggestions.map((s) => (
         <button
           key={s}
@@ -28,7 +26,7 @@ export function SuggestedQueries({ onSelect }: SuggestedQueriesProps) {
             cursor: "pointer",
             transition: "border-color 0.15s, color 0.15s, background 0.15s",
             fontFamily: "inherit",
-            textAlign: "left",
+            textAlign: "center",
           }}
           onMouseEnter={(e) => {
             const b = e.currentTarget as HTMLButtonElement;
